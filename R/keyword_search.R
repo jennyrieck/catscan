@@ -11,9 +11,9 @@
 #' data(cat_observations)
 #' Search_Terms <- data.frame(
 #'     KEYWORD = c("Mr Jones", "meow", "yowl"),
-#'     KEYCODE = c("(?i)\\b(Mister|Mr\.?) Jones?\\b", "(?i)meows?", "(?i)yowls?")
+#'     KEYCODE = c("(?i)\\b(Mister|Mr\\.?) Jones?\\b", "(?i)meows?", "(?i)yowls?")
 #' )
-#' RADAR_search_results <- keyword_search(
+#' search_results <- keyword_search(
 #'   KEYWORDS_DF = Search_Terms,
 #'   DATA = cat_observations,
 #'   SEARCH_COLUMN = "observation_note")

@@ -18,8 +18,7 @@ wb_summary_tab(
 
 \item{wb_style}{openxlsx wb style list generated from \code{\link[=wb_style]{wb_style()}}}
 
-\item{summary_tab}{dataframe of  of search parameters including: title, start_date,
-end_date, search_terms, and search_fields (see example)}
+\item{summary_tab}{dataframe of the search results}
 
 \item{sheet_num}{the sheet number to output the results table}
 
@@ -31,20 +30,20 @@ end_date, search_terms, and search_fields (see example)}
 openxlsx wb object with a search summary sheet added
 }
 \description{
-Function to create a standardized RADAR search results table. Use
+Function to create a standardized search results table. Use
 with \code{\link[=wb_style]{wb_style()}} and \code{\link[=wb_search_params]{wb_search_params()}}
 }
 \examples{
  \dontrun{
 data(cat_observations)
 cols_to_wrap = c("observation_note")
-cols_to_widen = c("cat_name", "neighbourhood", "observation_note")
+cols_to_widen = c("cat_name", "neighborhood", "observation_note")
 
 library(openxlsx)
 wb <- createWorkbook()
 addWorksheet(wb, sheetName = "Search Results", gridLines = FALSE)
 wb_summary_tab(wb = wb, wb_style = wb_style(),
-  summary_tab = RADAR_Summary, sheet_num = 1,
+  summary_tab = cat_observations, sheet_num = 1,
   cols_to_wrap = cols_to_wrap,
   cols_to_widen = cols_to_widen)
 saveWorkbook(wb, paste0("Cat Search_" ,Sys.Date(), ".xlsx"), overwrite = TRUE)
