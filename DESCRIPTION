@@ -1,0 +1,18 @@
+Package: catscan
+Title: Reporting Tools for Cat Observations in the Greater Toronto Area
+Version: 1.0.0
+Authors@R: 
+    person("Jenny", "Rieck", , "jennifer.rieck@hc-sc.gc.ca", role = c("aut", "cre"))
+Description: A toy package developed for the PHAC/HC R User Group Lunch & Learn on developing custom R packages. Includes functions and data to mimic reporting of health product complaint data, but in the context of fictional cat obersvartions in the Greater Toronto Area. Any resemblance to actual cats (living or dead) or actual events is purely coincidental.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+Depends: 
+    R (>= 3.5)
+Imports:
+    dplyr (>= 1.2.0),
+    openxlsx,
+    purrr,
+    stringr
+LazyData: true
