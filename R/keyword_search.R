@@ -11,7 +11,7 @@
 #' data(cat_observations)
 #' Search_Terms <- data.frame(
 #'     KEYWORD = c("Mr Jones", "meow", "yowl"),
-#'     KEYCODE = c("(?i)\\b(Mister|Mr\\.?) Jones?\\b", "(?i)meows?", "(?i)yowls?")
+#'     KEYCODE = c("(?i)\\b(Mister|Mr\\.?) Jones?\\b", "(?i)meow", "(?i)yowl")
 #' )
 #' search_results <- keyword_search(
 #'   KEYWORDS_DF = Search_Terms,
@@ -25,6 +25,35 @@
 #' @export
 
 keyword_search <- function(KEYWORDS_DF, DATA, SEARCH_COLUMN) {
+
+  # Validate KEYWORDS_DF ----
+  if (!is.data.frame(KEYWORDS_DF)) {
+    stop("`KEYWORDS_DF` must be a data frame.", call. = FALSE)
+  }
+  required_cols <- c("KEYWORD", "KEYCODE")
+  if (!all(required_cols %in% names(KEYWORDS_DF))) {
+    stop("`KEYWORDS_DF` must contain columns KEYWORD and KEYCODE.",  call. = FALSE)
+  }
+  if (any(is.na(KEYWORDS_DF$KEYWORD))) {
+    stop("`KEYWORD` contains missing values.", call. = FALSE)
+  }
+  if (any(is.na(KEYWORDS_DF$KEYCODE))) {
+    stop("`KEYCODE` contains missing values.", call. = FALSE)
+  }
+
+  # Validate DATA ----
+  if (!is.data.frame(DATA)) {
+    stop("`DATA` must be a data frame.", call. = FALSE)
+  }
+
+  # Validate SEARCH_COLUMN ----
+  if (!is.character(SEARCH_COLUMN) ||
+      length(SEARCH_COLUMN) != 1) {
+    stop("`SEARCH_COLUMN` must be a single character string.",  call. = FALSE)
+  }
+  if (!SEARCH_COLUMN %in% names(DATA)) {
+    stop(paste0("`", SEARCH_COLUMN, "` not found in DATA." ), call. = FALSE)
+  }
 
   pmap_dfr(KEYWORDS_DF, function(KEYWORD, KEYCODE) {
     DATA |>
