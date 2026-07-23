@@ -10,16 +10,49 @@
 #' @importFrom openxlsx createStyle
 #' @export
 
-wb_style <- function(){
+wb_style <- function() {
+  return(
+    list(
+      Title = openxlsx::createStyle(
+        fontSize = 16,
+        textDecoration = "bold",
+        fontColour = "#0F243E"
+      ),
 
-  Title <- openxlsx::createStyle(fontSize = 16, textDecoration = c("bold"), fontColour = "#0F243E")
-  Subtitle <- openxlsx::createStyle(fontSize = 14, textDecoration = c("bold"), fontColour = "#0F243E")
-  CentreTable <- openxlsx::createStyle(halign = "center", valign = "top")
-  WrapContent <- openxlsx::createStyle(halign = "left", valign = "top", wrapText = TRUE)
-  WrapContentCentre <- openxlsx::createStyle(halign = "center", valign = "top", wrapText = TRUE)
-  TimeStampCentre <- openxlsx::createStyle(halign = "center", valign = "top", numFmt = "yyyy-mm-dd hh:mm:ss")
-  DateCentre <- openxlsx::createStyle(halign = "center", valign = "top", numFmt = "yyyy-mm-dd")
+      Subtitle = openxlsx::createStyle(
+        fontSize = 14,
+        textDecoration = "bold",
+        fontColour = "#0F243E"
+      ),
 
-  return(list = c(Title = Title, Subtitle = Subtitle, CentreTable = CentreTable,
-                  WrapContent = WrapContent, TimeStampCentre = TimeStampCentre, DateCentre = DateCentre))
+      CentreTable = openxlsx::createStyle(
+        halign = "center",
+        valign = "top"
+      ),
+
+      WrapContent = openxlsx::createStyle(
+        halign = "left",
+        valign = "top",
+        wrapText = TRUE
+      ),
+
+      WrapContentCentre = openxlsx::createStyle(
+        halign = "center",
+        valign = "top",
+        wrapText = TRUE
+      ),
+
+      TimeStampCentre = openxlsx::createStyle(
+        halign = "center",
+        valign = "top",
+        numFmt = "yyyy-mm-dd hh:mm:ss"
+      ),
+
+      DateCentre = openxlsx::createStyle(
+        halign = "center",
+        valign = "top",
+        numFmt = "yyyy-mm-dd"
+      )
+    )
+  )
 }
