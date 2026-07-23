@@ -25,7 +25,7 @@ Expects KEYCODE to be regex formatted strings
 data(cat_observations)
 Search_Terms <- data.frame(
     KEYWORD = c("Mr Jones", "meow", "yowl"),
-    KEYCODE = c("(?i)\\\\b(Mister|Mr\\\\.?) Jones?\\\\b", "(?i)meows?", "(?i)yowls?")
+    KEYCODE = c("(?i)\\\\b(Mister|Mr\\\\.?) Jones?\\\\b", "(?i)meow", "(?i)yowl")
 )
 search_results <- keyword_search(
   KEYWORDS_DF = Search_Terms,

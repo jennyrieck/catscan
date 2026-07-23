@@ -12,24 +12,26 @@ mk_keyword_search_regex(
 )
 }
 \arguments{
-\item{KEYWORDS}{a string vector of search terms}
+\item{KEYWORDS}{Character vector of search terms.}
 
-\item{STANDALONE}{boolean; standalone word/word boundaries? default = TRUE}
+\item{STANDALONE}{Logical. Should word boundaries be added? default = TRUE}
 
-\item{IGNORE_CASE}{boolean; ignore upper/lower case? default = TRUE}
+\item{IGNORE_CASE}{Logical. Should matching be case-insensitive? default = TRUE}
 
-\item{MAKE_PLURAL}{boolean; make keyword plural by adding "s" to the end? default = FALSE}
+\item{MAKE_PLURAL}{Logical. Should an optional trailing "s" be added? default = FALSE}
 }
 \value{
-dataframe of keywords and the corresponding regex keycodes
+A data frame with columns KEYWORD and KEYCODE (regex)
 }
 \description{
-Takes a string vector and converts it to a dataframe with regex formatting
-to handle word boundaries, case sensitivity, and basic pluralization.
+Takes a character vector and converts it to a dataframe containing
+regex patterns suitable for use with keyword searches.
+}
+\details{
 Creates a dataframe compatible for use with \code{\link[=keyword_search]{keyword_search()}}
 }
 \examples{
-KEYWORDS_DF <- mk_keyword_search_regex(c("Pixel", "Beach(es)?"),
+KEYWORDS_DF <- mk_keyword_search_regex(KEYWORDS = c("Pixel", "Beach(es)?"),
                                 STANDALONE = TRUE, IGNORE_CASE = TRUE, MAKE_PLURAL = FALSE)
 
 }
