@@ -30,6 +30,23 @@
 #' @export
 
 wb_search_params <- function(wb, wb_style, params, sheet_num = 1){
+
+  # Validate input ----
+  if(class(wb) != "Workbook"){
+    stop( "`wb` must be class Workbook generated with `openxlsx::createWorkbook()`", call. = FALSE)
+  }
+  required_params <- c("title","start_date","end_date", "search_terms", "search_fields")
+  missing_params <- setdiff(required_params, names(params))
+  if(length(missing_params) > 0){
+    stop( "Missing required params: ",paste(missing_params, collapse = ", "), call. = FALSE)
+  }
+
+  # Validate dates ----
+  if(is.na(as.Date(params$start_date)) || is.na(as.Date(params$end_date))){
+    stop("`start_date` and `end_date` must be valid dates.", call. = FALSE)
+  }
+
+  # Write the parameter tab ----
   openxlsx::writeData(wb, sheet_num, x = params$title, startCol = 1, startRow = 1)
   openxlsx::writeData(wb, sheet_num, x = "PROTECTED B", startCol = 8, startRow = 1)
   openxlsx::writeData(wb, sheet_num, x = "Search Parameters", startCol = 1, startRow = 2)
