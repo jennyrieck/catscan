@@ -33,7 +33,7 @@
 wb_summary_tab <- function(wb, wb_style, summary_tab, sheet_num, cols_to_wrap, cols_to_widen){
 
   # Validate input ----
-  if(class(wb) != "Workbook"){
+  if(!inherits(wb, "Workbook")){
     stop( "`wb` must be class Workbook generated with `openxlsx::createWorkbook()`", call. = FALSE)
   }
   if (!is.data.frame(summary_tab)) {

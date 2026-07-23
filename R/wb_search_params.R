@@ -32,7 +32,7 @@
 wb_search_params <- function(wb, wb_style, params, sheet_num = 1){
 
   # Validate input ----
-  if(class(wb) != "Workbook"){
+  if(!inherits(wb, "Workbook")){
     stop( "`wb` must be class Workbook generated with `openxlsx::createWorkbook()`", call. = FALSE)
   }
   required_params <- c("title","start_date","end_date", "search_terms", "search_fields")
