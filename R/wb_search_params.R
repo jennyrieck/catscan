@@ -42,7 +42,16 @@ wb_search_params <- function(wb, wb_style, params, sheet_num = 1){
   }
 
   # Validate dates ----
-  if(is.na(as.Date(params$start_date)) || is.na(as.Date(params$end_date))){
+  start_date <- tryCatch(
+    as.Date(params$start_date),
+    error = function(e) NA
+  )
+  end_date <- tryCatch(
+    as.Date(params$end_date),
+    error = function(e) NA
+  )
+
+  if (is.na(start_date) || is.na(end_date)) {
     stop("`start_date` and `end_date` must be valid dates.", call. = FALSE)
   }
 
