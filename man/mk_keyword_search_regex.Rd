@@ -25,11 +25,11 @@ dataframe of keywords and the corresponding regex keycodes
 }
 \description{
 Takes a string vector and converts it to a dataframe with regex formatting
-to handle standalone strings, case sensitivity, and basic pluralization.
+to handle word boundaries, case sensitivity, and basic pluralization.
 Creates a dataframe compatible for use with \code{\link[=keyword_search]{keyword_search()}}
 }
 \examples{
-KEYWORDS_DF <- mk_keyword_search_keycode(c("courriel", "e[-]?mail"),
-                                STANDALONE = TRUE, IGNORE_CASE = TRUE, MAKE_PLURAL = TRUE)
+KEYWORDS_DF <- mk_keyword_search_regex(c("Pixel", "Beach(es)?"),
+                                STANDALONE = TRUE, IGNORE_CASE = TRUE, MAKE_PLURAL = FALSE)
 
 }
