@@ -3,12 +3,11 @@
 #' Function to create a standardized search results table. Use
 #' with [wb_style()] and [wb_search_params()]
 #'
-#' @param wb openxlsx wb object
-#' @param wb_style openxlsx wb style list generated from [wb_style()]
+#' @inheritParams wb_search_params
 #' @param summary_tab dataframe of the search results
+#' @param sheet_num the sheet number to output the results table
 #' @param cols_to_wrap vector of column names to be wrapped
 #' @param cols_to_widen vector of column names to be widened
-#' @param sheet_num the sheet number to output the results table
 #' @returns openxlsx wb object with a search summary sheet added
 #' @examples
 #'  \dontrun{
