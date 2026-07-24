@@ -1,0 +1,257 @@
+---
+title: "cat-search-template"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_collapsed: true
+    toc_depth: 2
+    number_sections: false
+vignette: >
+  %\VignetteIndexEntry{cat-search-template}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+```{r setup}
+library(catscan)
+library(dplyr)
+library(tidyr)
+library(openxlsx)
+```
+
+# Introduction
+
+This vignette will walk you through how to run a comprehensive search of the `cat_observations` dataset. The search allows for "fuzzy matching" of keywords by utilizing regex.
+
+> **_Pro Tip:_** 
+>
+> Test your custom regex here: [https://regex101.com/](https://regex101.com/)
+>
+
+This tutorial uses several custom `catscan` functions to create regex search codes, search datasets, and produce a nicely formatted xlsx report. Although these functions were built with the cat observation data in mind, they can be generalized to any dataset search. 
+
+This vignette will walk through provided a report for the following request:
+
+> **Request**
+> 
+> Email from Jenny Rieck on 2026-04-01
+>
+> Media request : Please provide all cat incidents for Mr. Jones, aka MJ since Feb 01 2026. Please indicate if the incident note mentions that he was noisy, meowing, or yowling. 
+
+# Load the data
+
+```{r load_data}
+# Report Name
+search_name = "Cat Search - Mr Jones"
+
+# In-scope criteria
+start_date = "2026-02-01"
+end_date = Sys.Date()
+
+# Load Data and filter date range
+data("cat_observations")
+cat_observations <- cat_observations |>
+  filter(date_received >= start_date,
+         date_received <= end_date)
+```
+
+# Craft search terms
+
+Now it's time to craft your list of keywords to search in the content of your dataset. All search terms are treated as `OR` conditions, meaning at least one of them was present to constitute a "hit" for a particular case.
+
+Some basic regex formatting is handled by input parameters to the `mk_keyword_search_regex()` function in `catscan`:
+
+* `STANDALONE` - TRUE (default) to set word boundaries (i.e., stand alone words) or FALSE to search the keyword within a word
+* `IGNORE_CASE` - TRUE (default) to ignore upper/lower case
+* `MAKE_PLURAL` - FLASE (default) or TRUE to make a keyword plural by adding an optional "s" to the end 
+
+See `help("mk_keyword_search_regex")` for more information.
+
+In addition to the simple regex provided by `mk_keyword_search_keycode()`, you can include regex within your search terms. For example, `"Qu[eé]bec"` will hit for both Quebec and Québec. 
+
+```{r search_terms}
+# Noisy Mr Jones search terms:
+search_terms <- c("(Mister|Mr\\.?) Jones?", "meow", "yowl", "nois(y|e)")
+
+search_keycodes <- mk_keyword_search_regex(search_terms, 
+                                             STANDALONE = FALSE,
+                                             IGNORE_CASE = TRUE,
+                                             MAKE_PLURAL = FALSE)
+```
+
+# Run the search
+
+The `keyword_search()` function in `catscan` will take the data frame created by `search_keycodes()` and search your given dataset for those terms and return only those rows where a “hit” was found.
+
+Specify the name of the text column to search with the `SEARCH_COLUMN` parameter.
+
+```{r run_seach}
+search_results <- keyword_search(
+  KEYWORDS_DF = search_keycodes, 
+  DATA = cat_observations, 
+  SEARCH_COLUMN = "observation_note"
+) 
+```
+
+# Aggregate the results
+
+Because `keyword_search()` returns one row fo each hit, text fields where multiple keywords are found will be duplicated. Therefore, you may want to reshape the search results to aggregate all the keyword hits across each observation.
+
+Because we are only interested in observations that involved Mr. Jones, we will filter for only those hits that include those terms. We will also add a column for the fiscal year that the incident was received.
+
+```{r aggregate}
+search_results_aggregated <- search_results |>
+  group_by(note_id) |>
+  mutate(ALL_HITS = paste0(unique(MATCH), collapse = " | ")) |>
+  ungroup() |>
+  select(-MATCH) |>
+  distinct() |>
+  filter(when_any(
+    grepl("Mister", ALL_HITS),
+    grepl("MJ", ALL_HITS),
+  )) |>
+  mutate(fy_received = gc_fiscal_year(date_received)) |>
+  arrange(incident_id)
+```
+
+# Save the report
+
+Finally, `catscan` has several functions to format an standard excel report with two tabs. The first tab, created with `wb_search_params()`, includes the search parameters for the timeframe, fields, and search terms. The second tab, created with `wb_summary_tab()` includes the search results table created in the step above. Custom styling is also applied with `wb_style()`.
+
+```{r report_out}
+wb_params <- list(
+  title = search_name, 
+  start_date = start_date, 
+  end_date = end_date, 
+  search_terms = data.frame(Search_Terms = search_terms),
+  search_fields = data.frame(Search_Fields = "Observation Notes")
+)
+
+wb <- createWorkbook()
+addWorksheet(wb, sheetName = "Search Parameters", gridLines = FALSE)
+addWorksheet(wb, sheetName = "Search Results", gridLines = FALSE)
+wb_search_params(wb = wb, 
+                 wb_style = wb_style(), 
+                 params = wb_params, 
+                 sheet_num = 1)
+
+to_wrap <- c("observation_note")
+to_widen <- c("cat_name", "observation_note", "ALL_HITS")
+
+wb_summary_tab(wb = wb,
+               wb_style = wb_style(),
+               summary_tab = search_results_aggregated,
+               sheet_num = 2,
+               cols_to_wrap = to_wrap,
+               cols_to_widen = to_widen)
+
+saveWorkbook(wb, paste0(wb_params$title, "_" , Sys.Date(), ".xlsx"), overwrite = TRUE)
+```
+
+
+# Full Search Template
+
+```{r full_template}
+####
+## Request ----
+####
+## Email from Jenny Rieck on 2026-04-01
+## Please provide all cat incidents for Mr. Jones, aka MJ since 
+## Feb 01 2026. Please indicate if the incident note mentions that he was
+## noisy, meowing, or yowling
+
+####
+## Setup ----
+####
+library(catscan)
+library(dplyr)
+library(tidyr)
+library(openxlsx)
+
+####
+## SETUP ----
+####
+
+# Specify search parameters
+search_params <- list(
+  title = "Cat Search - Mr Jones",
+  start_date = "2026-02-01",
+  end_date = Sys.Date(),
+  search_terms = data.frame(
+    Search_Terms = c("(Mister|Mr\\.?) Jones?", "meow", "yowl", "nois(y|e)")
+  ),
+  search_fields = data.frame(
+    Search_Fields = "Observation Notes"
+  ) 
+)
+
+# Load Data and filter date range
+data("cat_observations")
+cat_observations <- cat_observations |>
+  filter(date_received >= search_params$start_date,
+         date_received <= search_params$end_date)
+
+####
+## SEARCH ----
+####
+
+search_keycodes <- mk_keyword_search_regex(
+  search_params$search_terms$Search_Terms, 
+  STANDALONE = FALSE,
+  IGNORE_CASE = TRUE,
+  MAKE_PLURAL = FALSE
+)
+
+# Run the search:
+search_results <- keyword_search(
+  KEYWORDS_DF = search_keycodes, 
+  DATA = cat_observations, 
+  SEARCH_COLUMN = "observation_note"
+)
+
+# Aggregate hits across notes:
+search_results_aggregated <- search_results |>
+  group_by(note_id) |>
+  mutate(ALL_HITS = paste0(unique(MATCH), collapse = " | ")) |>
+  ungroup() |>
+  select(-MATCH) |>
+  distinct() |>
+  filter(when_any(
+    grepl("Mister", ALL_HITS),
+    grepl("MJ", ALL_HITS),
+  )) |>
+  mutate(fy_received = gc_fiscal_year(date_received)) |>
+  arrange(incident_id)
+
+####
+## Report Out ----
+####
+
+wb <- createWorkbook()
+addWorksheet(wb, sheetName = "Search Parameters", gridLines = FALSE)
+addWorksheet(wb, sheetName = "Search Results", gridLines = FALSE)
+wb_search_params(wb = wb, 
+                 wb_style = wb_style(), 
+                 params = search_params, 
+                 sheet_num = 1)
+
+to_wrap <- c("observation_note")
+to_widen <- c("cat_name", "observation_note", "ALL_HITS")
+
+wb_summary_tab(wb = wb,
+               wb_style = wb_style(),
+               summary_tab = search_results_aggregated,
+               sheet_num = 2,
+               cols_to_wrap = to_wrap,
+               cols_to_widen = to_widen)
+
+saveWorkbook(wb, paste0(search_params$title, "_" , Sys.Date(), ".xlsx"), overwrite = TRUE)
+```
