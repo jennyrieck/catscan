@@ -11,7 +11,6 @@ This function is meant to serve as an example of a R bad function.
 It is missing documentation. The function, input parameters and variable names
 are not descriptive. There is an input parameter named "format" which is
 also a base R function. There is no validation of the input parameters.
-}
-\details{
+
 See \code{\link[=gc_fiscal_year]{gc_fiscal_year()}} for an improved version of this function
 }

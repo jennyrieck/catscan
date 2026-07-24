@@ -26,8 +26,6 @@ A data frame with columns KEYWORD and KEYCODE (regex)
 \description{
 Takes a character vector and converts it to a dataframe containing
 regex patterns suitable for use with keyword searches.
-}
-\details{
 Creates a dataframe compatible for use with \code{\link[=keyword_search]{keyword_search()}}
 }
 \examples{

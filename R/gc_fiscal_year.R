@@ -1,5 +1,6 @@
 #' Convert dates to Government of Canada fiscal year
 #'
+#' @description
 #' Government of Canada fiscal years begin on April 1 and end on
 #' March 31 of the following year.
 #'

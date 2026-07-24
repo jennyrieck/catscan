@@ -1,5 +1,6 @@
 #' Get the FY
 #'
+#' @description
 #' This function is meant to serve as an example of a R bad function.
 #' It is missing documentation. The function, input parameters and variable names
 #' are not descriptive. There is an input parameter named "format" which is

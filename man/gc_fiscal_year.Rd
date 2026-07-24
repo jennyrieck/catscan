@@ -18,8 +18,7 @@ A character vector of fiscal years in the format
 \description{
 Government of Canada fiscal years begin on April 1 and end on
 March 31 of the following year.
-}
-\details{
+
 This function is meant to show best practices for writing an R function.
 See \code{\link[=fy]{fy()}} for a counter example.
 }

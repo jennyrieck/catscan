@@ -2,7 +2,6 @@
 #'
 #' Takes a character vector and converts it to a dataframe containing
 #' regex patterns suitable for use with keyword searches.
-#'
 #' Creates a dataframe compatible for use with [keyword_search()]
 #'
 #' @param KEYWORDS Character vector of search terms.
