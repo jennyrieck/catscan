@@ -14,7 +14,8 @@ Imports:
     dplyr (>= 1.2.0),
     openxlsx,
     purrr,
-    stringr
+    stringr,
+    lubridate
 LazyData: true
 Suggests: 
     knitr,
