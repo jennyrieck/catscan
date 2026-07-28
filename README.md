@@ -1,6 +1,3 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # catscan
 
 `catscan` is a toy R package developed for the PHAC/HC R User Group
@@ -21,15 +18,18 @@ You can install the latest version of catscan from
 <https://github.com/jennyrieck/catscan> with:
 
 ``` r
+## Install via devtools (depracated in devtools 2.5.0)
+# devtools::install_git("jennyrieck/catscan", build_vignettes = TRUE) 
+
+## Install via pak (preferred)
+# install.packages("pak")
+
 ## Set global option for your current R session to build vignettes
 options(pkg.build_vignettes = TRUE)
 
 ## Make sure knitr and rmarkdown are installed to build vignettes
 # install.packages(c("knitr", "rmarkdown"))
 
-## Install via pak 
-## devtools::install_gitlab() depracated in devtools 2.5.0
-# install.packages("pak")
 pak::pak("jennyrieck/catscan")
 ```
 
@@ -48,4 +48,4 @@ browseVignettes("catscan")
 
 The presentation from the PHAC/HC R User Group Lunch & Learn can be
 found here: [Packaging youR code: a beginner’s guide to R package
-development](https://github.com/jennyrieck/catscan/blob/main/inst/presentations/Packaging%20youR%20code.pdf)
+development](https://github.com/jennyrieck/catscan/blob/main/Packaging%20youR%20code.pdf)
