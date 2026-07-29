@@ -13,7 +13,7 @@ gc_fiscal_year(date, fy_format = c("long", "short"))
 }
 \value{
 A character vector of fiscal years in the format
-"YYYY-YYYY" or"YY-YY"
+"YYYY-YYYY" or "YY-YY"
 }
 \description{
 Government of Canada fiscal years begin on April 1 and end on
@@ -23,7 +23,7 @@ This function is meant to show best practices for writing an R function.
 See \code{\link[=fy]{fy()}} for a counter example.
 }
 \examples{
-gc_fiscal_year(as.Date("2026-03-31"), fy_format = "long")
-gc_fiscal_year(as.Date(c("2026-01-01", "2026-04-20")), fy_format = "short")
+gc_fiscal_year("2026-03-31", fy_format = "long")
+gc_fiscal_year(c("2026-01-01", "2026-04-20"), fy_format = "short")
 
 }

@@ -11,11 +11,11 @@
 #' @param fy_format long (YYYY-YYYY) or short (YY-YY) format?
 #'
 #' @return A character vector of fiscal years in the format
-#'   "YYYY-YYYY" or"YY-YY"
+#'   "YYYY-YYYY" or "YY-YY"
 #'
 #' @examples
-#' gc_fiscal_year(as.Date("2026-03-31"), fy_format = "long")
-#' gc_fiscal_year(as.Date(c("2026-01-01", "2026-04-20")), fy_format = "short")
+#' gc_fiscal_year("2026-03-31", fy_format = "long")
+#' gc_fiscal_year(c("2026-01-01", "2026-04-20"), fy_format = "short")
 #'
 #' @importFrom lubridate year month
 #'
